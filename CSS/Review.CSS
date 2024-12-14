@@ -1,0 +1,170 @@
+
+        /* Your provided CSS here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            /*<--background-image: url('../Images/Review.png');*/
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 100%;
+            height: 100%; /* Set container height */
+            border: 1px solid #ccc; /* Optional: add border to visualize the container */
+            margin: 20px auto; /* Optional: center the container horizontally */
+          }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background-color: #500000;
+            height: 100px;
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+        }
+
+        .navbar ul li a:hover {
+            color: #ffcc00;
+        }
+
+        .movie-list {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
+            justify-content: center;
+            background-color: #f9f9f9;
+        }
+
+        .movie-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            text-align: center;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .movie-info {
+            padding: 15px;
+        }
+
+        .movie-info h2 {
+            font-size: 18px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .movie-info p {
+            font-size: 14px;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .movie-info p strong {
+            color: #333;
+        }
+
+        .actions {
+            margin-top: 10px;
+        }
+
+        .actions button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .actions button:hover {
+            background-color: #0056b3;
+        }
+
+        a{
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Review Form Styles */
+        .review-form {
+            width: 500px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .review-form label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .review-form input, .review-form select, .review-form textarea {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 2px solid #ccc;
+            font-size: 16px;
+        }
+        .review-form select{
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 2px solid #ccc;
+            font-size: 16px;
+        }
+
+        .review-form input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .review-form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+      

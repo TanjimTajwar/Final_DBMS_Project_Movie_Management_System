@@ -1,0 +1,276 @@
+select * from AccountUser;
+select * from Movie;
+select * from MovieSession;
+select * from Review;
+select * from moviebooked;
+
+
+
+
+
+CREATE DATABASE dbms;
+
+
+
+USE dbms;
+
+DESCRIBE AccountUser;
+
+-- Create AccountUser table
+CREATE TABLE AccountUser (
+    username VARCHAR(255) PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+
+
+-- Create Movie table
+CREATE TABLE Movie (
+    title VARCHAR(100) PRIMARY KEY,
+    genre VARCHAR(50),
+    duration TIME,
+    release_date DATE,
+    language VARCHAR(50)
+);
+
+-- Create MovieSession table
+CREATE TABLE MovieSession (
+    session_id INT AUTO_INCREMENT PRIMARY KEY,
+    movie_title VARCHAR(100),
+    session_time Varchar(100),
+    FOREIGN KEY (movie_title) REFERENCES Movie(title) ON DELETE CASCADE
+);
+
+-- Create Review table
+CREATE TABLE Review (
+    review_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255),
+    movie_title VARCHAR(100),
+    rating INT CHECK (rating BETWEEN 1 AND 10),
+    comment TEXT,
+    review_date DATETIME,
+    FOREIGN KEY (username) REFERENCES AccountUser(username) ON DELETE CASCADE,
+    FOREIGN KEY (movie_title) REFERENCES Movie(title) ON DELETE CASCADE
+);
+
+
+-- Create moviebooked table
+CREATE TABLE moviebooked (
+    username VARCHAR(255),
+    movie_title VARCHAR(100),
+    show_time VARCHAR(50),  -- Day, Afternoon, Evening, Night
+    number_of_tickets int,
+    price VARCHAR(50),  -- Luxary, Premium, Regular
+    seat_number INT AUTO_INCREMENT,
+    purchase_date DATE,
+    Payment_ID varchar(50),
+    PRIMARY KEY (seat_number),
+    FOREIGN KEY (username) REFERENCES AccountUser(username) ON DELETE CASCADE,
+    FOREIGN KEY (movie_title) REFERENCES Movie(title) ON DELETE CASCADE
+);
+
+-- Set auto increment behavior for seat_number based on price
+DELIMITER //
+CREATE TRIGGER set_seat_number BEFORE INSERT ON moviebooked
+FOR EACH ROW
+BEGIN
+    IF NEW.price = 'Regular' THEN
+        SET NEW.seat_number = (SELECT IFNULL(MAX(seat_number), 999) + 1 FROM moviebooked WHERE price = 'Regular');
+    ELSEIF NEW.price = 'Premium' THEN
+        SET NEW.seat_number = (SELECT IFNULL(MAX(seat_number), 1999) + 1 FROM moviebooked WHERE price = 'Premium');
+    ELSEIF NEW.price = 'Luxary' THEN
+        SET NEW.seat_number = (SELECT IFNULL(MAX(seat_number), 2999) + 1 FROM moviebooked WHERE price = 'Luxary');
+    END IF;
+END; //
+DELIMITER ;
+
+
+
+-- Insert 10 sample user records into AccountUser with Bangladeshi names
+INSERT INTO AccountUser (username, email, name, phone, password)
+VALUES 
+    ('rahim123', 'rahim.hossain@example.com', 'Abdur Rahim', '01712345678', 'rahimPass2024'),
+    ('karim.bd', 'karim.ahmed@example.com', 'Abdul Karim', '01812345679', 'karimSecure'),
+    ('sumiya_98', 'sumiya.begum@example.com', 'Sumiya Begum', '01998765432', 'sumiya@pass'),
+    ('farhan77', 'farhan.islam@example.com', 'Farhan Islam', '01611223344', 'farhan123'),
+    ('nabila_tasnim', 'nabila.tasnim@example.com', 'Nabila Tasnim', '01599887766', 'nabilaPass'),
+    ('shamim.cu', 'shamim.uddin@example.com', 'Shamim Uddin', '01345678901', 'shamim2023'),
+    ('afsana.01', 'afsana.akter@example.com', 'Afsana Akter', '01412344321', 'afsana@bd'),
+    ('rashedul.khan', 'rashedul.khan@example.com', 'Rashedul Khan', '01766554433', 'rashedPass'),
+    ('mim.akther', 'mim.akther@example.com', 'Mim Akther', '01855443322', 'mim@1234'),
+    ('zakir123', 'zakir.hossain@example.com', 'Zakir Hossain', '01544332211', 'zakir2024');
+
+
+
+
+-- Insert 10 movie bookings
+INSERT INTO moviebooked (username, movie_title, show_time, number_of_tickets, price, purchase_date, Payment_ID)
+VALUES 
+    ('rahim123', 'Loki', 'Evening', 2, 'Regular', '2024-12-01', 'PAY001'),
+    ('karim.bd', 'Stree 2: Sarkate Ka Aatank', 'Night', 3, 'Premium', '2024-12-01', 'PAY002'),
+    ('sumiya_98', 'Pushpa: The Rise - Part 1', 'Afternoon', 4, 'Luxary', '2024-12-02', 'PAY003'),
+    ('farhan77', 'Jailer', 'Evening', 1, 'Regular', '2024-12-03', 'PAY004'),
+    ('nabila_tasnim', 'Ala Vaikunthapurramuloo', 'Day', 2, 'Premium', '2024-12-03', 'PAY005'),
+    ('tariq007', 'Good Newwz', 'Evening', 3, 'Luxary', '2024-12-04', 'PAY006'),
+    ('mahmudul456', 'Bang Chor', 'Night', 2, 'Regular', '2024-12-04', 'PAY007'),
+    ('lisa_2000', 'Din the Day', 'Afternoon', 5, 'Premium', '2024-12-05', 'PAY008'),
+    ('rayhan99', 'Pushpa: The Rise - Part 1', 'Night', 1, 'Luxary', '2024-12-05', 'PAY009'),
+    ('sadia_jahan', 'Jailer', 'Day', 2, 'Regular', '2024-12-06', 'PAY010');
+
+
+
+
+-- Insert 10 reviews
+INSERT INTO Review (username, movie_title, rating, comment, review_date)
+VALUES
+    ('rahim123', 'Loki', 9, 'Amazing action and storytelling!', '2024-12-02 18:30:00'),
+    ('karim.bd', 'Stree 2: Sarkate Ka Aatank', 7, 'Funny and scary at the same time!', '2024-12-02 20:00:00'),
+    ('sumiya_98', 'Pushpa: The Rise - Part 1', 10, 'Incredible performance by Allu Arjun!', '2024-12-03 15:00:00'),
+    ('farhan77', 'Jailer', 8, 'Rajinikanth nailed it!', '2024-12-03 19:30:00'),
+    ('nabila_tasnim', 'Ala Vaikunthapurramuloo', 9, 'Loved the family drama and action!', '2024-12-04 12:00:00'),
+    ('tariq007', 'Good Newwz', 6, 'Lighthearted comedy but predictable story.', '2024-12-04 19:00:00'),
+    ('mahmudul456', 'Bang Chor', 8, 'A fun and thrilling ride!', '2024-12-05 21:00:00'),
+    ('lisa_2000', 'Din the Day', 5, 'Average storyline, good action scenes.', '2024-12-05 16:00:00'),
+    ('rayhan99', 'Pushpa: The Rise - Part 1', 10, 'A masterpiece!', '2024-12-06 22:00:00'),
+    ('sadia_jahan', 'Jailer', 7, 'Good movie, but a bit slow-paced.', '2024-12-06 11:00:00');
+
+
+-- Insert Movies
+INSERT INTO Movie (title, genre, duration, release_date, language)
+VALUES 
+('Loki', 'Action, Adventure, Fantasy', '02:27:00', '2021-06-09', 'English'),
+('Stree 2: Sarkate Ka Aatank', 'Horror, Comedy', '02:27:00', '2024-08-01', 'Hindi'),
+('Pushpa: The Rise - Part 1', 'Action, Drama', '02:59:00', '2021-12-17', 'Telugu'),
+('Jailer', 'Action, Thriller', '02:46:00', '2023-08-10', 'Hindi'),
+('Ala Vaikunthapurramuloo', 'Action, Drama, Family', '02:45:00', '2020-01-12', 'Telugu'),
+('Good Newwz', 'Comedy, Drama', '02:12:00', '2019-12-27', 'Hindi'),
+('Bang Chor', 'Comedy, Thriller', '02:00:00', '2017-06-16', 'Hindi'),
+('Din the Day', 'Action, Drama', '02:18:00', '2021-07-10', 'Bengali');
+
+-- Insert Movie Sessions for all movies
+INSERT INTO MovieSession (movie_title, session_time)
+VALUES 
+-- Loki Sessions
+('Loki', 'Day(12.00)'),
+('Loki', 'After-Noon(3.00)'),
+('Loki', 'Evening(6.00)'),
+('Loki', 'Night(9.00)'),
+
+-- Stree 2 Sessions
+('Stree 2: Sarkate Ka Aatank', 'Day(12.00)'),
+('Stree 2: Sarkate Ka Aatank', 'After-Noon(3.00)'),
+('Stree 2: Sarkate Ka Aatank', 'Evening(6.00)'),
+('Stree 2: Sarkate Ka Aatank', 'Night(9.00)'),
+
+-- Pushpa Sessions
+('Pushpa: The Rise - Part 1', 'Day(12.00)'),
+('Pushpa: The Rise - Part 1', 'After-Noon(3.00)'),
+('Pushpa: The Rise - Part 1', 'Evening(6.00)'),
+('Pushpa: The Rise - Part 1', 'Night(9.00)'),
+
+-- Jailer Sessions
+('Jailer', 'Day(12.00)'),
+('Jailer', 'After-Noon(3.00)'),
+('Jailer', 'Evening(6.00)'),
+('Jailer', 'Night(9.00)'),
+
+-- Ala Vaikunthapurramuloo Sessions
+('Ala Vaikunthapurramuloo', 'Day(12.00)'),
+('Ala Vaikunthapurramuloo', 'After-Noon(3.00)'),
+('Ala Vaikunthapurramuloo', 'Evening(6.00)'),
+('Ala Vaikunthapurramuloo', 'Night(9.00)'),
+
+-- Good Newwz Sessions
+('Good Newwz', 'Day(12.00)'),
+('Good Newwz', 'After-Noon(3.00)'),
+('Good Newwz', 'Evening(6.00)'),
+('Good Newwz', 'Night(9.00)'),
+
+-- Bang Chor Sessions
+('Bang Chor', 'Day(12.00)'),
+('Bang Chor', 'After-Noon(3.00)'),
+('Bang Chor', 'Evening(6.00)'),
+('Bang Chor', 'Night(9.00)'),
+
+-- Din the Day Sessions
+('Din the Day', 'Day(12.00)'),
+('Din the Day', 'After-Noon(3.00)'),
+('Din the Day', 'Evening(6.00)'),
+('Din the Day', 'Night(9.00)');
+
+
+-- Other movie session data would follow a similar pattern.
+
+-- Query to get account information
+SELECT * 
+FROM AccountUser 
+WHERE username = 'username';
+
+-- Query to get ticket information
+SELECT 
+    AccountUser.name AS UserName,
+    Ticket.seat_number AS SeatNumber,
+    Ticket.price AS Price,
+    Ticket.purchase_date AS PurchaseDate,
+    MovieSession.session_time AS ShowTime,
+    Movie.title AS MovieName
+FROM Ticket
+JOIN AccountUser ON Ticket.username = AccountUser.username
+JOIN MovieSession ON Ticket.session_id = MovieSession.session_id
+JOIN Movie ON MovieSession.movie_title = Movie.title
+WHERE AccountUser.username = 'username';
+
+-- Query to get review information
+SELECT 
+    AccountUser.name AS UserName,
+    Movie.title AS MovieTitle,
+    Review.rating AS Rating,
+    Review.comment AS Comment,
+    Review.review_date AS ReviewDate
+FROM Review
+JOIN AccountUser ON Review.username = AccountUser.username
+JOIN Movie ON Review.movie_title = Movie.title
+WHERE AccountUser.username = 'username';
+
+-- Query to get all users
+SELECT * 
+FROM AccountUser;
+
+-- Query to get movie sessions
+SELECT 
+    Movie.title AS MovieTitle,
+    Movie.genre AS Genre,
+    Movie.duration AS Duration,
+    Movie.release_date AS ReleaseDate,
+    Movie.language AS Language,
+    MovieSession.session_time AS SessionTime
+FROM Movie
+JOIN MovieSession ON Movie.title = MovieSession.movie_title;
+
+-- Query to get all reviews
+SELECT 
+    AccountUser.name AS UserName,
+    Movie.title AS MovieTitle,
+    Review.rating AS Rating,
+    Review.comment AS Comment,
+    Review.review_date AS ReviewDate
+FROM Review
+JOIN AccountUser ON Review.username = AccountUser.username
+JOIN Movie ON Review.movie_title = Movie.title;
+
+-- Query to get detailed ticket information
+SELECT 
+    Ticket.ticket_id AS TicketID,
+    AccountUser.name AS UserName,
+    Movie.title AS MovieTitle,
+    Ticket.seat_number AS SeatNumber,
+    Ticket.price AS Price,
+    Ticket.purchase_date AS PurchaseDate,
+    MovieSession.session_time AS ShowTime
+FROM Ticket
+JOIN AccountUser ON Ticket.username = AccountUser.username
+JOIN MovieSession ON Ticket.session_id = MovieSession.session_id
+JOIN Movie ON MovieSession.movie_title = Movie.title;

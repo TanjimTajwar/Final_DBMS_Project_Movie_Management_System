@@ -1,0 +1,150 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: antiquewhite;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2c0d0d;
+    color: white;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 15px 25px;
+    background-color: #500000;
+    height: 200x;
+}
+
+.navbar .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+}
+
+.navbar ul li a:hover {
+    color: #ffcc00;
+}
+
+/* Add Pushpa Image */
+#addPushpaImg {
+    width: 100%; /* Image should cover 80% of the width */
+    margin: 60px auto; /* Center the image horizontally */
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+}
+
+#addPushpaImg img {
+    width: 100%; /* Ensure the image takes up 100% of the container width */
+    height: auto; /* Maintain the image aspect ratio */
+}
+
+/* Hero Section */
+.hero { /* Replace this with the actual Pushpa image */
+    background-size: cover; /* Corrected the background size */
+    background-position: center;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.hero h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.hero .actions button,
+.hero .actions button a {
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #ffcc00;
+    border: none;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.hero .actions button:hover,
+.hero .actions button a:hover {
+    background-color: #ffc107;
+}
+
+/* Movie Gallery */
+.movie-gallery {
+    padding: 20px 50px;
+}
+
+.movie-gallery h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.movies {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+}
+
+.movie {
+    text-align: center;
+    width: 150px;
+}
+
+.movie img {
+    border-radius: 8px;
+    transition: transform 0.3s;
+    height: 200px;
+    width: 180px;
+}
+
+.movie img:hover {
+    transform: scale(1.1);
+}
+
+.movie p {
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+#pushpaImg {
+    width: 100%;
+    height: auto;
+}
+
+/* Navbar hover effect */
+.navbar li:hover {
+    color: white;
+    background-color: #2c0d0d;
+    border: 2px solid white;
+}
+
+a{
+    text-decoration: none;
+    color: antiquewhite;
+}
