@@ -1,0 +1,97 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.0'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+group 'com.university.admission'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 17
+targetCompatibility = 17
+
+javafx {
+    version = "17"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
+}
+
+dependencies {
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
+    
+    // JavaFX
+    implementation 'org.openjfx:javafx-controls:17'
+    implementation 'org.openjfx:javafx-fxml:17'
+    
+    // Database
+    implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'org.hibernate:hibernate-core:6.2.7.Final'
+    implementation 'org.hibernate:hibernate-entitymanager:5.6.15.Final'
+    
+    // Dependency Injection
+    implementation 'org.springframework:spring-context:6.0.11'
+    implementation 'org.springframework:spring-orm:6.0.11'
+    
+    // Logging
+    implementation 'org.slf4j:slf4j-api:2.0.7'
+    implementation 'ch.qos.logback:logback-classic:1.4.11'
+    
+    // Utils
+    implementation 'com.google.guava:guava:32.1.2-jre'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'commons-io:commons-io:2.13.0'
+    
+    // Testing
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    testImplementation 'org.mockito:mockito-core:5.5.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+application {
+    mainClassName = 'com.university.admission.Main'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = '17'
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = '17'
+}
+
+// Task to create all needed directories
+task createDirs {
+    doLast {
+        mkdir "src/main/java/com/university/admission/model"
+        mkdir "src/main/java/com/university/admission/view"
+        mkdir "src/main/java/com/university/admission/controller"
+        mkdir "src/main/java/com/university/admission/service"
+        mkdir "src/main/java/com/university/admission/repository"
+        mkdir "src/main/java/com/university/admission/util"
+        mkdir "src/main/java/com/university/admission/config"
+        
+        mkdir "src/main/kotlin/com/university/admission/model"
+        mkdir "src/main/kotlin/com/university/admission/view"
+        mkdir "src/main/kotlin/com/university/admission/controller"
+        mkdir "src/main/kotlin/com/university/admission/service"
+        mkdir "src/main/kotlin/com/university/admission/repository"
+        mkdir "src/main/kotlin/com/university/admission/util"
+        mkdir "src/main/kotlin/com/university/admission/config"
+        
+        mkdir "src/main/resources"
+        mkdir "src/test/java"
+        mkdir "src/test/kotlin"
+        mkdir "src/test/resources"
+    }
+} 

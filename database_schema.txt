@@ -1,0 +1,179 @@
+# বিশ্ববিদ্যালয় ভর্তি ব্যবস্থাপনা অ্যাপ্লিকেশন - ডাটাবেস স্কিমা
+
+## টেবিল স্ট্রাকচার
+
+### 1. students
+```
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| id            | bigint       | NO   | PRI | NULL    | auto_increment |
+| student_id    | varchar(20)  | NO   | UNI | NULL    |                |
+| first_name    | varchar(50)  | NO   |     | NULL    |                |
+| last_name     | varchar(50)  | NO   |     | NULL    |                |
+| email         | varchar(100) | NO   | UNI | NULL    |                |
+| phone_number  | varchar(20)  | YES  |     | NULL    |                |
+| date_of_birth | date         | YES  |     | NULL    |                |
+| gender        | varchar(10)  | YES  |     | NULL    |                |
+| address       | varchar(255) | YES  |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+```
+
+### 2. departments
+```
++----------------+--------------+------+-----+---------+----------------+
+| Field          | Type         | Null | Key | Default | Extra          |
++----------------+--------------+------+-----+---------+----------------+
+| id             | bigint       | NO   | PRI | NULL    | auto_increment |
+| department_code| varchar(20)  | NO   | UNI | NULL    |                |
+| name           | varchar(100) | NO   |     | NULL    |                |
+| description    | text         | YES  |     | NULL    |                |
+| parent_id      | bigint       | YES  | MUL | NULL    |                |
++----------------+--------------+------+-----+---------+----------------+
+```
+
+### 3. programs
+```
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id           | bigint       | NO   | PRI | NULL    | auto_increment |
+| program_code | varchar(20)  | NO   | UNI | NULL    |                |
+| name         | varchar(100) | NO   |     | NULL    |                |
+| description  | text         | YES  |     | NULL    |                |
+| duration     | int          | YES  |     | NULL    |                |
+| credits      | int          | YES  |     | NULL    |                |
+| department_id| bigint       | NO   | MUL | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+```
+
+### 4. applications
+```
++-------------------+--------------+------+-----+---------+----------------+
+| Field             | Type         | Null | Key | Default | Extra          |
++-------------------+--------------+------+-----+---------+----------------+
+| id                | bigint       | NO   | PRI | NULL    | auto_increment |
+| application_number| varchar(20)  | NO   | UNI | NULL    |                |
+| student_id        | bigint       | NO   | MUL | NULL    |                |
+| program_id        | bigint       | NO   | MUL | NULL    |                |
+| status            | varchar(20)  | NO   |     | NULL    |                |
+| submission_date   | datetime     | NO   |     | NULL    |                |
+| last_updated      | datetime     | YES  |     | NULL    |                |
+| comments          | text         | YES  |     | NULL    |                |
++-------------------+--------------+------+-----+---------+----------------+
+```
+
+### 5. documents
+```
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| id            | bigint       | NO   | PRI | NULL    | auto_increment |
+| application_id| bigint       | NO   | MUL | NULL    |                |
+| document_type | varchar(50)  | NO   |     | NULL    |                |
+| file_name     | varchar(255) | NO   |     | NULL    |                |
+| file_path     | varchar(255) | NO   |     | NULL    |                |
+| upload_date   | datetime     | NO   |     | NULL    |                |
+| verified      | boolean      | NO   |     | false   |                |
++---------------+--------------+------+-----+---------+----------------+
+```
+
+### 6. admission_tests
+```
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| id            | bigint       | NO   | PRI | NULL    | auto_increment |
+| program_id    | bigint       | NO   | MUL | NULL    |                |
+| test_name     | varchar(100) | NO   |     | NULL    |                |
+| test_date     | datetime     | NO   |     | NULL    |                |
+| location      | varchar(255) | YES  |     | NULL    |                |
+| total_marks   | int          | NO   |     | NULL    |                |
+| passing_marks | int          | NO   |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+```
+
+### 7. test_results
+```
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| id            | bigint       | NO   | PRI | NULL    | auto_increment |
+| test_id       | bigint       | NO   | MUL | NULL    |                |
+| student_id    | bigint       | NO   | MUL | NULL    |                |
+| marks_obtained| float        | NO   |     | NULL    |                |
+| result_status | varchar(20)  | NO   |     | NULL    |                |
+| remarks       | text         | YES  |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+```
+
+### 8. payments
+```
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| id            | bigint       | NO   | PRI | NULL    | auto_increment |
+| application_id| bigint       | NO   | MUL | NULL    |                |
+| amount        | decimal(10,2)| NO   |     | NULL    |                |
+| payment_date  | datetime     | NO   |     | NULL    |                |
+| payment_method| varchar(50)  | NO   |     | NULL    |                |
+| transaction_id| varchar(100) | YES  | UNI | NULL    |                |
+| status        | varchar(20)  | NO   |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+```
+
+### 9. notifications
+```
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| id            | bigint       | NO   | PRI | NULL    | auto_increment |
+| student_id    | bigint       | NO   | MUL | NULL    |                |
+| title         | varchar(100) | NO   |     | NULL    |                |
+| message       | text         | NO   |     | NULL    |                |
+| notification_type | varchar(20) | NO |    | NULL    |                |
+| sent_date     | datetime     | NO   |     | NULL    |                |
+| read_status   | boolean      | NO   |     | false   |                |
++---------------+--------------+------+-----+---------+----------------+
+```
+
+## রিলেশনশিপ ডায়াগ্রাম
+
+```
+departments --< programs --< applications >-- students
+                                  ^
+                                  |
+                                  v
+                              documents
+                                  
+students --< test_results >-- admission_tests >-- programs
+
+applications --< payments
+
+students --< notifications
+```
+
+## ইনডেক্স
+
+- `students`: `student_id`, `email`
+- `departments`: `department_code`, `parent_id`
+- `programs`: `program_code`, `department_id`
+- `applications`: `application_number`, `student_id`, `program_id`, `status`
+- `documents`: `application_id`
+- `admission_tests`: `program_id`
+- `test_results`: `test_id`, `student_id`
+- `payments`: `application_id`, `transaction_id`
+- `notifications`: `student_id`
+
+## ফরেন কী কনস্ট্রেইন্টস
+
+- `departments.parent_id` -> `departments.id`
+- `programs.department_id` -> `departments.id`
+- `applications.student_id` -> `students.id`
+- `applications.program_id` -> `programs.id`
+- `documents.application_id` -> `applications.id`
+- `admission_tests.program_id` -> `programs.id`
+- `test_results.test_id` -> `admission_tests.id`
+- `test_results.student_id` -> `students.id`
+- `payments.application_id` -> `applications.id`
+- `notifications.student_id` -> `students.id` 

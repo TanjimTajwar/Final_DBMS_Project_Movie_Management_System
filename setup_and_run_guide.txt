@@ -1,0 +1,173 @@
+# বিশ্ববিদ্যালয় ভর্তি ব্যবস্থাপনা অ্যাপ্লিকেশন - সেটআপ এবং চালানোর গাইড
+
+## প্রয়োজনীয় সফটওয়্যার
+
+1. **Java Development Kit (JDK) 17** বা উচ্চতর
+2. **Gradle 7.0** বা উচ্চতর
+3. **MySQL** বা **PostgreSQL** ডাটাবেস
+4. **Git** (ঐচ্ছিক, কোড রিপোজিটরি ক্লোন করার জন্য)
+5. **IntelliJ IDEA** বা **Eclipse** (ঐচ্ছিক, কোড এডিটিং এর জন্য)
+
+## ধাপে ধাপে সেটআপ প্রক্রিয়া
+
+### ১. প্রজেক্ট ক্লোন করা (যদি Git রিপোজিটরি থাকে)
+
+```bash
+git clone https://github.com/your-username/university-admission-app.git
+cd university-admission-app
+```
+
+### ২. ডাটাবেস সেটআপ
+
+1. MySQL বা PostgreSQL ডাটাবেস সার্ভার ইনস্টল করুন এবং চালু করুন
+2. নতুন ডাটাবেস তৈরি করুন:
+
+```sql
+CREATE DATABASE university_admission;
+CREATE USER 'admission_user'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON university_admission.* TO 'admission_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+3. `src/main/resources` ডিরেক্টরিতে `database.properties` ফাইল তৈরি করুন:
+
+```properties
+jdbc.driverClassName=com.mysql.cj.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/university_admission?useSSL=false&serverTimezone=UTC
+jdbc.username=admission_user
+jdbc.password=your_password
+hibernate.dialect=org.hibernate.dialect.MySQLDialect
+hibernate.show_sql=true
+hibernate.format_sql=true
+hibernate.hbm2ddl.auto=update
+```
+
+### ৩. প্রজেক্ট বিল্ড করা
+
+Gradle ব্যবহার করে প্রজেক্ট বিল্ড করুন:
+
+```bash
+./gradlew clean build
+```
+
+Windows এ:
+
+```bash
+gradlew.bat clean build
+```
+
+### ৪. অ্যাপ্লিকেশন চালানো
+
+```bash
+./gradlew run
+```
+
+Windows এ:
+
+```bash
+gradlew.bat run
+```
+
+অথবা, জার ফাইল ডিরেক্টলি চালানো:
+
+```bash
+java -jar build/libs/university-admission-app-1.0-SNAPSHOT.jar
+```
+
+## প্রজেক্টের ফাইল এবং ডিরেক্টরি বিবরণ
+
+### প্রধান ফাইলসমূহ
+
+1. **Main.java** - অ্যাপ্লিকেশনের এন্ট্রি পয়েন্ট। JavaFX অ্যাপ্লিকেশন শুরু করে এবং Spring ApplicationContext ইনিশিয়ালাইজ করে।
+
+2. **AppConfig.java** - Spring কনফিগারেশন ক্লাস। কম্পোনেন্ট স্ক্যানিং এবং বিন রেজিস্ট্রেশন কনফিগার করে।
+
+3. **DatabaseConfig.java** - ডাটাবেস কনফিগারেশন ক্লাস। ডাটাবেস কানেকশন এবং হাইবারনেট কনফিগারেশন সেট আপ করে।
+
+4. **MainView.java** - অ্যাপ্লিকেশনের মূল UI। মেনু বার, সাইড নেভিগেশন এবং ট্যাব পেন সেট আপ করে।
+
+### মডেল ক্লাসগুলি
+
+1. **Student.java** - শিক্ষার্থী এন্টিটি ক্লাস। শিক্ষার্থীর তথ্য সংরক্ষণ করে।
+
+2. **Application.java** - আবেদন এন্টিটি ক্লাস। ভর্তি আবেদনের তথ্য সংরক্ষণ করে।
+
+3. **Program.java** - প্রোগ্রাম এন্টিটি ক্লাস। বিশ্ববিদ্যালয়ের প্রোগ্রাম/কোর্সের তথ্য সংরক্ষণ করে।
+
+4. **Department.java** - বিভাগ এন্টিটি ক্লাস। বিশ্ববিদ্যালয়ের বিভাগের তথ্য সংরক্ষণ করে।
+
+5. **StudentDto.kt** - শিক্ষার্থী ডাটা ট্রান্সফার অবজেক্ট। ভিউ লেয়ারে ডাটা পাঠানোর জন্য ব্যবহৃত হয়।
+
+### সার্ভিস ক্লাসগুলি
+
+1. **StudentService.java** - শিক্ষার্থী সম্পর্কিত বিজনেস লজিক হ্যান্ডেল করে।
+
+2. **ApplicationService.java** - আবেদন সম্পর্কিত বিজনেস লজিক হ্যান্ডেল করে।
+
+3. **AdmissionStrategy.java** - ভর্তি প্রক্রিয়ার স্ট্র্যাটেজি ইন্টারফেস। স্ট্র্যাটেজি প্যাটার্ন ব্যবহার করে।
+
+4. **MeritBasedAdmissionStrategy.java** - মেরিট ভিত্তিক ভর্তি প্রক্রিয়া ইমপ্লিমেন্ট করে।
+
+5. **ApplicationProcessor.java** - আবেদন প্রসেসিং ইন্টারফেস। ডেকোরেটর প্যাটার্ন ব্যবহার করে।
+
+6. **BasicApplicationProcessor.java** - বেসিক আবেদন প্রসেসিং ইমপ্লিমেন্ট করে।
+
+7. **ApplicationProcessorDecorator.java** - আবেদন প্রসেসর ডেকোরেটর অ্যাবস্ট্রাক্ট ক্লাস।
+
+8. **DocumentVerificationProcessor.java** - ডকুমেন্ট ভেরিফিকেশন প্রসেসিং যোগ করে।
+
+9. **StudentMapper.kt** - Student এন্টিটি এবং StudentDto এর মধ্যে কনভার্শন করে।
+
+### রিপোজিটরি ক্লাসগুলি
+
+1. **StudentRepository.java** - শিক্ষার্থী ডাটা অ্যাকসেস ইন্টারফেস।
+
+2. **ApplicationRepository.java** - আবেদন ডাটা অ্যাকসেস ইন্টারফেস।
+
+### ইউটিলিটি ক্লাসগুলি
+
+1. **FormFactory.java** - বিভিন্ন ধরনের ফর্ম তৈরি করে। ফ্যাক্টরি প্যাটার্ন ব্যবহার করে।
+
+2. **EventListener.java** - ইভেন্ট লিসেনার ইন্টারফেস। অবজারভার প্যাটার্ন ব্যবহার করে।
+
+3. **EventManager.java** - ইভেন্ট ম্যানেজমেন্ট ক্লাস। অবজারভার প্যাটার্ন ব্যবহার করে।
+
+4. **Command.java** - কমান্ড ইন্টারফেস। কমান্ড প্যাটার্ন ব্যবহার করে।
+
+5. **CommandInvoker.java** - কমান্ড এক্সিকিউট এবং আনডু করে। কমান্ড প্যাটার্ন ব্যবহার করে।
+
+6. **SaveApplicationCommand.java** - আবেদন সেভ করার কমান্ড ক্লাস। কমান্ড প্যাটার্ন ব্যবহার করে।
+
+## ডিজাইন প্যাটার্ন ব্যবহার
+
+1. **সিঙ্গেলটন প্যাটার্ন** - `DatabaseConfig` ক্লাসে ডাটাবেস কানেকশন ম্যানেজ করতে ব্যবহৃত হয়েছে।
+
+2. **ফ্যাক্টরি প্যাটার্ন** - `FormFactory` ক্লাসে বিভিন্ন ধরনের ফর্ম তৈরি করতে ব্যবহৃত হয়েছে।
+
+3. **অবজারভার প্যাটার্ন** - `EventListener` এবং `EventManager` ক্লাসে ইভেন্ট হ্যান্ডলিং করতে ব্যবহৃত হয়েছে।
+
+4. **স্ট্র্যাটেজি প্যাটার্ন** - `AdmissionStrategy` ইন্টারফেস এবং `MeritBasedAdmissionStrategy` ক্লাসে বিভিন্ন ভর্তি প্রক্রিয়া হ্যান্ডেল করতে ব্যবহৃত হয়েছে।
+
+5. **ডেকোরেটর প্যাটার্ন** - `ApplicationProcessor`, `ApplicationProcessorDecorator`, এবং `DocumentVerificationProcessor` ক্লাসে আবেদন প্রসেসিং এক্সটেন্ড করতে ব্যবহৃত হয়েছে।
+
+6. **কমান্ড প্যাটার্ন** - `Command`, `CommandInvoker`, এবং `SaveApplicationCommand` ক্লাসে অপারেশন এনক্যাপসুলেট করতে ব্যবহৃত হয়েছে।
+
+7. **ডেপেন্ডেন্সি ইনজেকশন** - Spring ফ্রেমওয়ার্ক ব্যবহার করে সমস্ত সার্ভিস এবং কম্পোনেন্টে ডেপেন্ডেন্সি ইনজেকশন ব্যবহৃত হয়েছে।
+
+## ট্রাবলশুটিং
+
+1. **ডাটাবেস কানেকশন এরর**
+   - ডাটাবেস সার্ভার চালু আছে কিনা চেক করুন
+   - `database.properties` ফাইলে সঠিক কানেকশন তথ্য আছে কিনা চেক করুন
+
+2. **Gradle বিল্ড এরর**
+   - Gradle ভার্সন চেক করুন
+   - `build.gradle` ফাইলে ডিপেন্ডেন্সি ভার্সন কনফ্লিক্ট আছে কিনা চেক করুন
+
+3. **JavaFX এরর**
+   - JDK ভার্সন চেক করুন (JDK 17 বা উচ্চতর প্রয়োজন)
+   - JavaFX মডিউল সঠিকভাবে কনফিগার করা আছে কিনা চেক করুন
+
+4. **অ্যাপ্লিকেশন রানটাইম এরর**
+   - লগ ফাইল চেক করুন
+   - স্প্রিং কনফিগারেশন চেক করুন 
